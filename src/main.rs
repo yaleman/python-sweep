@@ -237,16 +237,20 @@ fn main() {
                         *writer += dir_size;
                     }
                 } else {
+                    let mut writer = total_deleted.write().expect("Failed to get write lock");
+                    *writer += dir_size;
                     println!("Found {:?} ({})", val, human_readable_size);
                 }
             }
         };
     }
+    let human_readable_size =
+        byte_unit::Byte::from_u64(*total_deleted.read().expect("Failed to get reader"))
+            .get_appropriate_unit(byte_unit::UnitType::Decimal)
+            .to_string();
     if cli.delete {
-        let human_readable_size =
-            byte_unit::Byte::from_u64(*total_deleted.read().expect("Failed to get reader"))
-                .get_appropriate_unit(byte_unit::UnitType::Decimal)
-                .to_string();
         eprintln!("Deleted {} of virtualenvs", human_readable_size);
+    } else {
+        eprintln!("Found {} of virtualenvs", human_readable_size);
     }
 }
