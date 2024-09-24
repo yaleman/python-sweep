@@ -1,10 +1,11 @@
 [package]
 name = "python-sweep"
-version = "0.1.0"
+version = "0.0.1"
 edition = "2021"
 repository = "https://github.com/yaleman/python-sweep"
 license = "MIT"
 description = "A simple tool to help you clean up your Python virtual environments"
+authors = ["James Hodgkinson <james@terminaloutcomes.com>"]
 
 [dependencies]
 byte-unit = "5.1.4"
