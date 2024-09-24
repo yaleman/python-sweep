@@ -1,5 +1,5 @@
 ---
-name: Clippy
+name: Linting
 
 # Trigger the workflow on push or pull request
 "on":
@@ -14,14 +14,15 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 jobs:
-  clippy:
+  linting:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - name: Setup sccache
         uses: mozilla-actions/sccache-action@v0.0.5
         with:
-          version: "v0.4.2"
-      - name: "Run clippy (ignores errors, this is just a check)"
+          version: "v0.5.4"
+      - name: "Run clippy"
         run: cargo clippy
-        continue-on-error: true
+      - name: "Run fmt"
+        run: cargo fmt

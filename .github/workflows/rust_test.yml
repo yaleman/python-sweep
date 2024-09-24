@@ -22,18 +22,9 @@ jobs:
         uses: dtolnay/rust-toolchain@stable
         with:
           toolchain: stable
-      - name: Setup sccache
-        uses: mozilla-actions/sccache-action@v0.0.5
-        with:
-          version: "v0.4.2"
-      - name: Install typical dependencies
-        run: |
-          sudo apt-get update && \
-          sudo apt-get install -y \
-            libssl-dev
       - name: "Run cargo test"
         run: cargo test
-      - name: "Run cargo clippy"
-        run: cargo clippy
-      - name: "Build the workspace"
+      - name: "Build the workspace (debug)"
         run: cargo build --workspace
+      - name: "Build the workspace (release)"
+        run: cargo build --workspace --release
