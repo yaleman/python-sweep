@@ -75,7 +75,7 @@ fn check_path(
             entry
                 .path()
                 .parent()
-                .expect("can't get parent of a known file?")
+                .expect("Can't get parent of a known file?")
                 .to_path_buf(),
         );
         let project_path = entry
@@ -83,19 +83,20 @@ fn check_path(
             .parent()
             .expect("Can't find the parent path for a file we just found?");
         if cli.debug {
-            println!("project path: {:?}", project_path);
+            eprintln!("Project path: {:?}", project_path);
         }
         let venv = project_path.join(".venv");
         if venv.exists() {
             if cli.debug {
-                println!("venv path found: {:?}", venv);
+                eprintln!("venv path found: {:?}", venv);
             }
             Ok(venv)
-        } else {
-            // run poetry env info --path --directory=project_path
+        } else if which::which("poetry").is_ok() {
+            // try to use poetry
             if cli.debug {
-                println!("venv path not found, running poetry");
+                eprintln!("venv path not found, trying to run poetry");
             }
+
             let output = match Command::new("poetry")
                 .args([
                     "env",
@@ -117,7 +118,9 @@ fn check_path(
 
             if output.status.success() {
                 let venv_path = String::from_utf8_lossy(&output.stdout);
-                println!("venv path from poetry: {:?}", venv_path.trim());
+                if cli.debug {
+                    eprintln!("Virtualenv path from poetry: {:?}", venv_path.trim());
+                }
                 Ok(PathBuf::from(venv_path.trim()))
             } else {
                 Err(Errors::NotReallyAnError(format!(
@@ -125,6 +128,10 @@ fn check_path(
                     output.stderr
                 )))
             }
+        } else {
+            Err(Errors::NotReallyAnError(
+                "Don't have any other way to ".to_string(),
+            ))
         }
     } else {
         Err(Errors::NotReallyAnError("Not pyproject.toml".to_string()))
@@ -144,7 +151,7 @@ fn main() {
     let total_deleted = Arc::new(RwLock::new(0));
     let total_deleted_callback = total_deleted.clone();
     ctrlc::set_handler(move || {
-        println!("Received Ctrl+C, exiting...");
+        eprintln!("Received Ctrl+C, exiting...");
         if cli.delete {
             let human_readable_size = byte_unit::Byte::from_u64(
                 total_deleted_callback
@@ -154,7 +161,7 @@ fn main() {
             )
             .get_appropriate_unit(byte_unit::UnitType::Decimal)
             .to_string();
-            println!("Deleted {} of virtualenvs", human_readable_size);
+            eprintln!("Deleted {} of virtualenvs", human_readable_size);
             std::process::exit(0);
         }
     })
@@ -224,7 +231,7 @@ fn main() {
                             eprintln!("Deleting {}", val.display());
                         }
                         std::fs::remove_dir_all(&val).expect("Failed to delete venv");
-                        eprintln!("Deleted {:?} ({})", val.display(), human_readable_size);
+                        println!("Deleted {:?} ({})", val.display(), human_readable_size);
                         let mut writer = total_deleted.write().expect("Failed to get write lock");
 
                         *writer += dir_size;

@@ -2,6 +2,9 @@
 name = "python-sweep"
 version = "0.1.0"
 edition = "2021"
+repository = "https://github.com/yaleman/python-sweep"
+license = "MIT"
+description = "A simple tool to help you clean up your Python virtual environments"
 
 [dependencies]
 byte-unit = "5.1.4"
@@ -9,3 +12,4 @@ clap = { version = "4.5.18", features = ["derive"] }
 ctrlc = "3.4.5"
 dialoguer = "0.11.0"
 walkdir = "2.5.0"
+which = "6.0.3"
