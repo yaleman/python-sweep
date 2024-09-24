@@ -13,6 +13,7 @@ enum Errors {
 }
 
 #[derive(Parser, Debug)]
+#[clap(version)]
 struct Cli {
     /// Path to search for virtualenvs
     path: Option<PathBuf>,
