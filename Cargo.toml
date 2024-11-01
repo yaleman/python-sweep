@@ -14,4 +14,4 @@ clap = { version = "4.5.20", features = ["derive"] }
 ctrlc = "3.4.5"
 dialoguer = "0.11.0"
 walkdir = "2.5.0"
-which = "6.0.3"
+which = "7.0.0"
