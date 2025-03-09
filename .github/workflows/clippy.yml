@@ -19,9 +19,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Setup sccache
-        uses: mozilla-actions/sccache-action@v0.0.7
-        with:
-          version: "v0.5.4"
+        uses: mozilla-actions/sccache-action@v0.0.8
       - name: "Run clippy"
         run: cargo clippy
       - name: "Run fmt"
