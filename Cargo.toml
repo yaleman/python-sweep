@@ -10,7 +10,7 @@ readme = "README.md"
 
 [dependencies]
 byte-unit = "5.1.6"
-clap = { version = "4.5.47", features = ["derive"] }
+clap = { version = "4.5.48", features = ["derive"] }
 ctrlc = "3.5.0"
 dialoguer = "0.12.0"
 walkdir = "2.5.0"
